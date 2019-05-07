@@ -59,15 +59,6 @@ class FesCuestionario extends LitElement {
             ''
         }
       </main>
-      <footer class="footer-app">
-        <div class="container-footer">
-          <p>Made with &#9829; by the Catsys team.</p>
-        </div>
-        <a class="social-github" href="https://github.com/alfonsorios96/catsys-cli">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="github-logo">
-          <b>View on github</b>
-        </a>
-      </footer>
     `;
   }
 

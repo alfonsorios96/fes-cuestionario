@@ -25,3 +25,19 @@ function average(data) {
 function mode(array) {
   return array.reduce((accumulator, number) => number > accumulator? number : accumulator, 0);
 }
+
+function closest(numeros, num) {
+  let cercano = 0;
+  let diferencia = Number.MAX_SAFE_INTEGER;
+  for (let i = 0; i < numeros.length; i++) {
+    if (numeros[i] === num) {
+      return numeros[i];
+    } else {
+      if(Math.abs(numeros[i]-num)<diferencia){
+        cercano=numeros[i];
+        diferencia = Math.abs(numeros[i]-num);
+      }
+    }
+  }
+  return cercano;
+}

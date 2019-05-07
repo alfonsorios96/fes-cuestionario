@@ -32,7 +32,6 @@ export const styles = css`
 
 .container-app {
     padding: 15px;
-    box-sizing: border-box;
 }
 .container-footer {
     padding: 0 15px;
