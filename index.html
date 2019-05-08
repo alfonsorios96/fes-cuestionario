@@ -98,6 +98,26 @@
 <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 <!-- Built with love using PWA Starter Kit -->
 <script src="src/utils/math.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.0.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#config-web-app -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDGMgBd0qMPl8SV9Yayg9MBDlHHbrXZ4ic",
+    authDomain: "fes-cuestionario.firebaseapp.com",
+    databaseURL: "https://fes-cuestionario.firebaseio.com",
+    projectId: "fes-cuestionario",
+    storageBucket: "fes-cuestionario.appspot.com",
+    messagingSenderId: "516325086550",
+    appId: "1:516325086550:web:5f51740daff26417"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
 <script type="module" src="src/fes-cuestionario-app.js"></script>
 </body>
 </html>
