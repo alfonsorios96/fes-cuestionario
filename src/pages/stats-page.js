@@ -1,10 +1,10 @@
 import {html, css} from 'lit-element';
 import {PageDM} from '../utils/page-dm.js';
+import './stat-info.js';
 
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-toast/paper-toast.js';
-import '@google-web-components/google-chart/google-chart.js';
 
 class StatsPage extends PageDM {
   static get styles() {
@@ -16,55 +16,73 @@ class StatsPage extends PageDM {
           align-items: center;
           justify-content: center;
         }
-        
-        .info {
-          display: flex;
-          justify-content: space-evenly;
-        }
-        
-        .table {
-           display: flex;
-           align-items: center;
-          justify-content: center;
-        }
-        
-        .form-control {
-          width: 600px;
-        }
-        
-        paper-button {
-          width: 100%;
-        }
-        
-        paper-input {
-          width: 100%;
-        }
       `;
   }
 
   static get properties() {
     return {
       data: {type: Array},
-      admin: {type: Object}
+      admin: {type: Object},
+      translate: {type: Map}
     };
   }
 
   constructor() {
     super();
-    this.data = [
-      ["Aspecto valorado", "Título de Licenciatura"],
-      ["Muy Importante", 40],
-      ["Importante", 30],
-      ["Poco Importante", 4],
-      ["Deficiente", 12],
-      ["Nada Importante", 22]
-    ];
+    this.translate = new Map();
+    this.translate.set('question-1', '1-	¿Cuáles son los principales aspectos valorados en el proceso de selección y reclutamiento de profesionistas universitarios de su empresa o institución?');
+    this.translate.set('question-2', '2-	Marque cuáles serían las habilidades y valores que se toma en cuenta para el desempeño de los profesionistas de Ingeniería Química');
+    this.translate.set('question-3', '3- ¿Cuántos candidatos con Licenciatura en Ingeniería Química han logrado ocupar un puesto en su organización tomando en cuenta departamentos, direcciones etc ?');
+    this.translate.set('question-4', '4-	¿Cuáles son las áreas en su organización a las cuales se asignan a los candidatos con Licenciatura en Ingeniería Química?');
+    this.translate.set('question-5', '5- De acuerdo a la siguiente lista, ¿Qué tan importante son los siguientes conocimientos para considerar el posicionamiento en su empresa?');
+    this.translate.set('question-6', '6-	De acuerdo a las salidas terminales propuestas en la carrera de Ingeniería Química de la Facultad de Estudios  ¿Cuál es su opinión acerca de ellas?');
+
+    this.translate.set('grade', 'Título de licenciatura');
+    this.translate.set('experience', 'Experiencia laboral');
+    this.translate.set('languages', 'Otros idiomas');
+    this.translate.set('referers', 'Contactos o conocidos (Recomendación)');
+    this.translate.set('age', 'Edad');
+    this.translate.set('interview', 'Entrevista');
+    this.translate.set('postgrade', 'Estudios de posgrado');
+    this.translate.set('knowledge', 'Pruebas de conocimiento');
+    this.translate.set('institute', 'Institución de procedencia');
+    this.translate.set('available', 'Disponibilidad de cambio de residencia');
+    this.translate.set('test-psico', 'Tests de psicométrico');
+
+    this.translate.set('candidates', 'Rango de candidatos');
+    this.translate.set('sm', '5 ´S & 5 ´M.');
+    this.translate.set('six-sigma', 'Six Sigma');
+    this.translate.set('supply-chain', 'Supply Chain');
+    this.translate.set('manufacturing', 'Lean Manufacturing');
+    this.translate.set('quality-systems', 'Sistemas de Calidad');
+    this.translate.set('rules', 'Conocimiento de normas para el sector de su empresa');
+    this.translate.set('process', 'Conocimiento de maquinaria de los procesos');
+    this.translate.set('supervision', 'Supervención de personal y evaluaciones de desempeño');
+    this.translate.set('storage', 'Control de almacén e inventarios');
+    this.translate.set('security', 'Seguridad, higiene laboral y protección civil');
+    this.translate.set('projects', 'Desarrollo de proyectos');
+    this.translate.set('energy', 'Energía renovable');
+    this.translate.set('reolo', 'Reología');
+    this.translate.set('goverment', 'Trámites ante instituciones de gobierno');
+    this.translate.set('ambiental', 'Protección Ambiental');
+
+
     window.addEventListener('storage', ({key, newValue}) => {
       if (key === 'sregistered') {
         const session = JSON.parse(localStorage.getItem('sregistered'));
         this.admin = newValue ? session : null;
       }
     });
+    firebase.database().ref('/users').on('value', snapshot => {
+      const payload = snapshot.val();
+      const ask = [];
+      for (const key in payload) {
+        ask.push(payload[key]);
+      }
+      this.data = ask;
+      console.log(ask.map(item => item.ask));
+    });
+
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         user = {
@@ -101,31 +119,11 @@ class StatsPage extends PageDM {
   }
 </style></custom-style>
         ${
-
       this.admin ? html`
         <section class="principal-container">
         <paper-button @click="${this.logout}">Cerrar sesión</paper-button>
         <h3>SELECCIÓN Y RECLUTAMIENTO DE EGRESADOS</h3>
-        <p>1-	¿Cuáles son los principales aspectos valorados en el proceso de selección y reclutamiento de profesionistas universitarios de su empresa o institución?</p>
-          <div class="info">
-            <google-chart type="pie" .data="${this.data}" options='{"title": "Título de Licenciatura"}'></google-chart>
-            <div class="table">
-          <table border="1">
-              <thead>
-                  <th>Desviación estándar</th>
-                  <th>Moda</th>
-                  <th>Media</th>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>${this._getLabel(standardDeviation(this._getValues()))}</td>
-                  <td>${this._getLabel(mode(this._getValues()))}</td>
-                  <td>${this._getLabel(average(this._getValues()))}</td>
-                </tr>
-              </tbody>
-            </table>  
-            </div>
-          </div>
+        <stat-info title="1-	¿Cuáles son los principales aspectos valorados en el proceso de selección y reclutamiento de profesionistas universitarios de su empresa o institución?"></stat-info>
         </section>
         ` : html`
           <section class="principal-container">
@@ -184,23 +182,6 @@ class StatsPage extends PageDM {
       });
 
 
-  }
-
-  _getLabel(number) {
-    let label = '';
-    number = closest(this._getValues(), number);
-    for (const [index, value] of this.data) {
-      if (value === number) {
-        label = index;
-      }
-    }
-    return label;
-  }
-
-  _getValues() {
-    return this.data
-      .map(item => typeof item[1] === 'number' ? item[1] : null)
-      .filter(item => item !== null);
   }
 }
 

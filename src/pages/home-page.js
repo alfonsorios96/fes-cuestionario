@@ -53,7 +53,7 @@ class HomePage extends PageDM {
       this.step === 'personal' ? html`<personal-info .personal="${this.data.personal}" @change-section="${this._changeSection}"></personal-info>` : ''
       }
         ${
-      this.step === 'ask' ? html`<ask-info .ask="${this.data.ask}" @change-section="${this._changeSection}"></ask-info>` : ''
+      this.step === 'ask' ? html`<ask-info @change-section="${this._changeSection}"></ask-info>` : ''
       }
       </section>
     `;

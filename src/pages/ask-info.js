@@ -235,7 +235,7 @@ class AskInfo extends LitElement {
       
       ${
       this.subStep === '5' ? html`
-         <p>5-	 De acuerdo a la siguiente lista, ¿Qué tan importante son los siguientes conocimientos para considerar el posicionamiento en su empresa?</p>
+         <p>5- De acuerdo a la siguiente lista, ¿Qué tan importante son los siguientes conocimientos para considerar el posicionamiento en su empresa?</p>
         
         <div class="form-control">
         <paper-dropdown-menu id="sm" class="lg-3" label="5 ´S & 5 ´M." no-animations>
@@ -283,7 +283,7 @@ class AskInfo extends LitElement {
             <paper-item>NADA IMPORTANTE</paper-item>
           </paper-listbox>
       </paper-dropdown-menu>  
-      <paper-dropdown-menu id="rules" class="lg-3" label="Conocimiento de normas para el sector de su empresa " no-animations>
+      <paper-dropdown-menu id="rules" class="lg-3" label="Conocimiento de normas para el sector de su empresa" no-animations>
           <paper-listbox slot="dropdown-content" selected="0">
             <paper-item>MUY IMPORTANTE</paper-item>
             <paper-item>IMPORTANTE</paper-item>
@@ -364,7 +364,7 @@ class AskInfo extends LitElement {
             <paper-item>NADA IMPORTANTE</paper-item>
           </paper-listbox>
       </paper-dropdown-menu>  
-      <paper-dropdown-menu id="ambiental" class="lg-3" label="Protección Ambiental " no-animations>
+      <paper-dropdown-menu id="ambiental" class="lg-3" label="Protección Ambiental" no-animations>
           <paper-listbox slot="dropdown-content" selected="0">
             <paper-item>MUY IMPORTANTE</paper-item>
             <paper-item>IMPORTANTE</paper-item>
