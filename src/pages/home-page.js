@@ -23,7 +23,13 @@ class HomePage extends PageDM {
   constructor() {
     super();
     // Get data from localStorage -> User, step and sub-step
-    const uid = localStorage.getItem('uid');
+    let key = '';
+    if (localStorage.getItem('uid')) {
+      key = localStorage.getItem('uid');
+    } else {
+      key = firebase.database().ref('/users').push().key;
+      localStorage.setItem('uid', key);
+    }
     const step = localStorage.getItem('step') ? localStorage.getItem('step') : 'company';
 
     this.step = step;
@@ -31,11 +37,18 @@ class HomePage extends PageDM {
     // Requires data from firebase by user recovered
     firebase
       .database()
-      .ref(`/users/${uid}`)
+      .ref(`/users/${key}`)
       .once('value')
       .then(snaptshot => {
         const payload = snaptshot.val();
         this.data = payload ? payload : {
+          company: {},
+          personal: {},
+          ask: {}
+        };
+      })
+      .catch(error => {
+        this.data = {
           company: {},
           personal: {},
           ask: {}
