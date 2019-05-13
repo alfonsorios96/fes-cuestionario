@@ -28,19 +28,11 @@ class HomePage extends PageDM {
 
     this.step = step;
 
-    // Requires data from firebase by user recovered
-    firebase
-      .database()
-      .ref(`/users/${uid}`)
-      .once('value')
-      .then(snaptshot => {
-        const payload = snaptshot.val();
-        this.data = payload ? payload : {
-          company: {},
-          personal: {},
-          ask: {}
-        };
-      });
+    this.data = {
+      company: {},
+      personal: {},
+      ask: {}
+    };
   }
 
   render() {
