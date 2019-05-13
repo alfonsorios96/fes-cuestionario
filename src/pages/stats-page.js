@@ -21,14 +21,31 @@ class StatsPage extends PageDM {
 
   static get properties() {
     return {
-      data: {type: Array},
+      data: {type: Object},
       admin: {type: Object},
-      translate: {type: Map}
+      translate: {type: Map},
+      options: {type: Object}
     };
   }
 
   constructor() {
     super();
+    this.data = {
+      1: [],
+      2: [],
+      3: [],
+      4: [],
+      5: [],
+      6: []
+    };
+
+    this.options = {
+      1: ["Muy Importante", "Importante", "Poco Importante", "Deficiente", "Nada Importante"],
+      2: ["Análisis de situaciones", "Toma de decisiones", "Comunicación de ideas", "Actitud, interés,  entusiasmo y buen carácter", "Conocimientos sobre el uso de la tecnología", "Habilidades para la organización, gestión y control de grupos de trabajo ", "Detecta, diagnostica, analiza y responde a las problemáticas en el lugar de trabajo", "Honesto e imparcial", "Leal y confiable", "Respetuoso y diplomático", "Responsable con las actividades designadas en su departamento", "Tolerable a la frustración y las presiones laborales cotidianas"],
+      3: ["Ninguno", "De 1 a 6", "De 6 a 12", "De 12 a 18", "Más de 18"],
+      5: ["Muy Importante", "Importante", "Poco Importante", "Deficiente", "Nada Importante"]
+    };
+
     this.translate = new Map();
     this.translate.set('question-1', '1-	¿Cuáles son los principales aspectos valorados en el proceso de selección y reclutamiento de profesionistas universitarios de su empresa o institución?');
     this.translate.set('question-2', '2-	Marque cuáles serían las habilidades y valores que se toma en cuenta para el desempeño de los profesionistas de Ingeniería Química');
@@ -36,36 +53,6 @@ class StatsPage extends PageDM {
     this.translate.set('question-4', '4-	¿Cuáles son las áreas en su organización a las cuales se asignan a los candidatos con Licenciatura en Ingeniería Química?');
     this.translate.set('question-5', '5- De acuerdo a la siguiente lista, ¿Qué tan importante son los siguientes conocimientos para considerar el posicionamiento en su empresa?');
     this.translate.set('question-6', '6-	De acuerdo a las salidas terminales propuestas en la carrera de Ingeniería Química de la Facultad de Estudios  ¿Cuál es su opinión acerca de ellas?');
-
-    this.translate.set('grade', 'Título de licenciatura');
-    this.translate.set('experience', 'Experiencia laboral');
-    this.translate.set('languages', 'Otros idiomas');
-    this.translate.set('referers', 'Contactos o conocidos (Recomendación)');
-    this.translate.set('age', 'Edad');
-    this.translate.set('interview', 'Entrevista');
-    this.translate.set('postgrade', 'Estudios de posgrado');
-    this.translate.set('knowledge', 'Pruebas de conocimiento');
-    this.translate.set('institute', 'Institución de procedencia');
-    this.translate.set('available', 'Disponibilidad de cambio de residencia');
-    this.translate.set('test-psico', 'Tests de psicométrico');
-
-    this.translate.set('candidates', 'Rango de candidatos');
-    this.translate.set('sm', '5 ´S & 5 ´M.');
-    this.translate.set('six-sigma', 'Six Sigma');
-    this.translate.set('supply-chain', 'Supply Chain');
-    this.translate.set('manufacturing', 'Lean Manufacturing');
-    this.translate.set('quality-systems', 'Sistemas de Calidad');
-    this.translate.set('rules', 'Conocimiento de normas para el sector de su empresa');
-    this.translate.set('process', 'Conocimiento de maquinaria de los procesos');
-    this.translate.set('supervision', 'Supervención de personal y evaluaciones de desempeño');
-    this.translate.set('storage', 'Control de almacén e inventarios');
-    this.translate.set('security', 'Seguridad, higiene laboral y protección civil');
-    this.translate.set('projects', 'Desarrollo de proyectos');
-    this.translate.set('energy', 'Energía renovable');
-    this.translate.set('reolo', 'Reología');
-    this.translate.set('goverment', 'Trámites ante instituciones de gobierno');
-    this.translate.set('ambiental', 'Protección Ambiental');
-
 
     window.addEventListener('storage', ({key, newValue}) => {
       if (key === 'sregistered') {
@@ -75,12 +62,17 @@ class StatsPage extends PageDM {
     });
     firebase.database().ref('/users').on('value', snapshot => {
       const payload = snapshot.val();
-      const ask = [];
       for (const key in payload) {
-        ask.push(payload[key]);
+        const ask = payload[key].ask;
+        this.data = {
+          1: [...this.data[1], ask[1]],
+          2: [...this.data[2], ask[2]],
+          3: [...this.data[3], ask[3]],
+          4: [...this.data[4], ask[4]],
+          5: [...this.data[5], ask[5]],
+          6: [...this.data[6], ask[6]]
+        };
       }
-      this.data = ask;
-      console.log(ask.map(item => item.ask));
     });
 
     firebase.auth().onAuthStateChanged(user => {
@@ -123,7 +115,10 @@ class StatsPage extends PageDM {
         <section class="principal-container">
         <paper-button @click="${this.logout}">Cerrar sesión</paper-button>
         <h3>SELECCIÓN Y RECLUTAMIENTO DE EGRESADOS</h3>
-        <stat-info title="1-	¿Cuáles son los principales aspectos valorados en el proceso de selección y reclutamiento de profesionistas universitarios de su empresa o institución?"></stat-info>
+        <stat-info title="${this.translate.get('question-1')}" .source="${this.data[1]}" .options="${this.options[1]}" sections></stat-info>
+        <stat-info title="${this.translate.get('question-2')}" .source="${this.data[2]}" .options="${this.options[2]}"></stat-info>
+        <stat-info title="${this.translate.get('question-3')}" .source="${this.data[3]}" .options="${this.options[3]}" sections></stat-info>
+        <stat-info title="${this.translate.get('question-5')}" .source="${this.data[5]}" .options="${this.options[5]}" sections></stat-info>
         </section>
         ` : html`
           <section class="principal-container">
