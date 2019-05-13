@@ -102,13 +102,7 @@ class CompanyInfo extends LitElement {
     };
 
     // Save data in firebase cloud
-    let key = '';
-    if (localStorage.getItem('uid')) {
-      key = localStorage.getItem('uid');
-    } else {
-      key = firebase.database().ref('/users').push().key;
-      localStorage.setItem('uid', key);
-    }
+    let key = localStorage.getItem('uid');
     firebase.database().ref(`/users/${key}/company`).set(this.company);
     // Notify the change of section
     this.dispatchEvent(new CustomEvent('change-section', {
