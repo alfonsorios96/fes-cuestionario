@@ -32,7 +32,26 @@ class AskInfo extends LitElement {
       
       ${
       this.subStep === '1' ? html`
-          <p>1-	¿Cuáles son los principales aspectos valorados en el proceso de selección y reclutamiento de profesionistas universitarios de su empresa o institución?</p>
+         <p>1- ¿Cuántos candidatos con Licenciatura en Ingeniería Química han logrado ocupar un puesto en su organización tomando en cuenta departamentos, direcciones etc ?</p>       
+        <div class="form-control">
+        <paper-dropdown-menu id="candidates" class="lg-1" label="Seleccione" no-animations>
+          <paper-listbox slot="dropdown-content" selected="0">
+            <paper-item>Ninguno</paper-item>
+            <paper-item>De 1 a 6</paper-item>
+            <paper-item>De 6 a 12</paper-item>
+            <paper-item>De 12 a 18</paper-item>
+            <paper-item>Más de 18</paper-item>
+          </paper-listbox>
+      </paper-dropdown-menu>
+        <paper-button class="lg-2" @click="${this._backSection}">Regresar</paper-button>
+        <paper-button class="lg-2" @click="${this._nextQuestion}" data-next="2">Continuar</paper-button>
+</div>
+      ` : ''
+      }
+      
+      ${
+      this.subStep === '2' ? html`
+          <p>2-	¿Cuáles son los principales aspectos valorados en el proceso de selección y reclutamiento de profesionistas universitarios de su empresa o institución?</p>
 <div class="form-control">
 <paper-dropdown-menu class="md-4" label="Título de licenciatura" no-animations id="grade">
           <paper-listbox slot="dropdown-content" selected="0">
@@ -146,15 +165,16 @@ class AskInfo extends LitElement {
 
 <paper-input class="md-4" label="Otras (mencionarlas)" id="main-specs-others"></paper-input>
 
-<paper-button class="lg-2" @click="${this._backSection}">Regresar</paper-button>
-<paper-button class="lg-2" @click="${this._nextQuestion}" data-next="2">Continuar</paper-button>
+<paper-button class="lg-3" @click="${this._backSection}">Regresar</paper-button>
+<paper-button class="lg-3" @click="${this._beforeQuestion}" data-prev="1">Pregunta anterior</paper-button>
+<paper-button class="lg-3" @click="${this._nextQuestion}" data-next="3">Continuar</paper-button>
 </div>
         ` : ''
       }
       
       ${
-      this.subStep === '2' ? html`
-        <p>2-	Marque cuáles serían las habilidades y valores que se toma en cuenta para el desempeño de los profesionistas de Ingeniería Química</p>
+      this.subStep === '3' ? html`
+        <p>3-	Marque cuáles serían las habilidades y valores que se toma en cuenta para el desempeño de los profesionistas de Ingeniería Química</p>
       <div class="form-control">
       <div class="md-4">
       <paper-checkbox>Análisis de situaciones</paper-checkbox>
@@ -194,26 +214,6 @@ class AskInfo extends LitElement {
 </div>
         <paper-input class="lg-1" label="Otras (mencionarlas)"></paper-input>
         
-        <paper-button class="lg-3" @click="${this._backSection}">Regresar</paper-button>
-        <paper-button class="lg-3" @click="${this._beforeQuestion}" data-prev="1">Pregunta anterior</paper-button>
-        <paper-button class="lg-3" @click="${this._nextQuestion}" data-next="3">Continuar</paper-button>
-</div>
-      ` : ''
-      }
-      
-      ${
-      this.subStep === '3' ? html`
-         <p>3- ¿Cuántos candidatos con Licenciatura en Ingeniería Química han logrado ocupar un puesto en su organización tomando en cuenta departamentos, direcciones etc ?</p>       
-        <div class="form-control">
-        <paper-dropdown-menu id="candidates" class="lg-1" label="Seleccione" no-animations>
-          <paper-listbox slot="dropdown-content" selected="0">
-            <paper-item>Ninguno</paper-item>
-            <paper-item>De 1 a 6</paper-item>
-            <paper-item>De 6 a 12</paper-item>
-            <paper-item>De 12 a 18</paper-item>
-            <paper-item>Más de 18</paper-item>
-          </paper-listbox>
-      </paper-dropdown-menu>
         <paper-button class="lg-3" @click="${this._backSection}">Regresar</paper-button>
         <paper-button class="lg-3" @click="${this._beforeQuestion}" data-prev="2">Pregunta anterior</paper-button>
         <paper-button class="lg-3" @click="${this._nextQuestion}" data-next="4">Continuar</paper-button>
@@ -393,7 +393,7 @@ class AskInfo extends LitElement {
       
       <paper-button class="lg-3" @click="${this._backSection}">Regresar</paper-button>
         <paper-button class="lg-3" @click="${this._beforeQuestion}" data-prev="5">Pregunta anterior</paper-button>
-        <paper-button class="lg-3" @click="${this._nextQuestion}" data-next="7">Finalizar</paper-button>
+        <paper-button class="lg-3" @click="${this._nextQuestion}" data-next="1">Finalizar</paper-button>
 </div>
       ` : ''
       }
@@ -423,6 +423,11 @@ class AskInfo extends LitElement {
     switch (subStep) {
       case '1':
         data = {
+          candidates: this.shadowRoot.querySelector('#candidates').value
+        };
+        break;
+      case '2':
+        data = {
           grade: this.shadowRoot.querySelector('#grade').value,
           experience: this.shadowRoot.querySelector('#experience').value,
           languages: this.shadowRoot.querySelector('#languages').value,
@@ -437,7 +442,7 @@ class AskInfo extends LitElement {
           mainSpecsOthers: this.shadowRoot.querySelector('#main-specs-others').value
         };
         break;
-      case '2':
+      case '3':
         const checkedBoxes = this.shadowRoot.querySelectorAll('paper-checkbox');
         data = [];
         for(const box of checkedBoxes) {
@@ -445,11 +450,6 @@ class AskInfo extends LitElement {
             data = [...data, box.innerText];
           }
         }
-        break;
-      case '3':
-        data = {
-          candidates: this.shadowRoot.querySelector('#candidates').value
-        };
         break;
       case '4':
         data = {
@@ -482,8 +482,12 @@ class AskInfo extends LitElement {
           engineering: this.shadowRoot.querySelector('#engineering').value,
           entrepreneurs: this.shadowRoot.querySelector('#entrepreneurs').value
         };
+        localStorage.setItem('sub-step', '1');
+        this.subStep = '1';
+        this.dispatchEvent(new CustomEvent('change-section', {
+          detail: 'company'
+        }));
         break;
-
     }
     firebase.database().ref(`/users/${uid}/ask/${subStep}`).set(data);
     const nextStep = event.currentTarget.dataset.next;
