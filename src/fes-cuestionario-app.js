@@ -30,6 +30,9 @@ class FesCuestionario extends LitElement {
         .main-app.out {
               animation: ${this._config.transition.type}TransitionPage ${this._config.transition.delay / 1000}s;
           }
+          p {
+            font-size: 12px;
+          }
       </style>
       <!-- Header -->
       <header class="header-app">
